@@ -59,3 +59,8 @@ Por defecto, el manejador de órdenes tiene dos órdenes registradas para las me
 
 Haga que a la aplicación se le inyecte el bean BasicBillCalculator y BillWithTaxesCalculator. Para esto utilice el principio de los Beans revisados en laboratorios anteriores y realice la inyección de dependencias entre éstos mediante las anotaciones @Autowired y @Service.
 * Nota:  Tiene que hacer que la clase "BillWithTaxesCalculator" utilice a "edu.eci.arsw.myrestaurant.beans.impl.colombia.StandardTaxesCalculator" para realizar su calculo, no es necesario que se inyecte.
+
+
+#Solucion
+
+Importante compila pero no con maven, se me borro el pom de la memoria.		

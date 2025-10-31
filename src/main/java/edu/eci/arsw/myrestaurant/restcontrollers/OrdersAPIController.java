@@ -20,8 +20,13 @@ import edu.eci.arsw.myrestaurant.model.Order;
 import edu.eci.arsw.myrestaurant.model.ProductType;
 import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
 import edu.eci.arsw.myrestaurant.services.RestaurantOrderServicesStub;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +42,22 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class OrdersAPIController {
-
+    RestaurantOrderServicesStub ross = new RestaurantOrderServicesStub();
+    Boolean calcTaxes = false;
 
     @GetMapping("/orders")
-    public Object allOrders(){
-        Object o = new Object();
+    public List<Order> allOrders(){
+        List<Order> orders = new ArrayList<>();
+        Set<Integer> tables = ross.getTablesWithOrders();
+        for(Integer t:tables){
+            Order o = ross.getTableOrder(t);
+            int cost = ross.calculateBill(o, ross.getProductsMap());
+            o.addDish("totalPrice", cost);
+            orders.add(o);
+        }
 
-        return o;
+
+        return orders;
     }
 
     

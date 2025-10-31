@@ -4,13 +4,18 @@ package edu.eci.arsw.myrestaurant.services;
 import edu.eci.arsw.myrestaurant.model.Order;
 import edu.eci.arsw.myrestaurant.model.RestaurantProduct;
 import edu.eci.arsw.myrestaurant.beans.BillCalculator;
+import edu.eci.arsw.myrestaurant.beans.TaxesCalculator;
 import edu.eci.arsw.myrestaurant.model.ProductType;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class RestaurantOrderServicesStub implements RestaurantOrderServices {
+public class RestaurantOrderServicesStub implements RestaurantOrderServices, BillCalculator, TaxesCalculator {
 
     
     BillCalculator calc = null;
@@ -107,5 +112,54 @@ public class RestaurantOrderServicesStub implements RestaurantOrderServices {
 
         tableOrders.put(3, o2);
     }
+
+    public Map<String, RestaurantProduct> getProductsMap(){
+        return productsMap;
+    }
+
+    public int calculateBill(Order o,Map<String,RestaurantProduct> productsMap) {
+        Set<String> orderedDishes = o.getOrderedDishes();
+        int totalPrice = 0;
+
+        for(String p:orderedDishes){
+            int qty = o.getDishOrderedAmount(p);
+            int price = productsMap.get(p).getPrice();
+            totalPrice+=(price*qty);
+        }
+        return totalPrice;
+        
+
+    }
+
+    public int getProductTaxes(Order o,Map<String,RestaurantProduct> productsMap) {
+        Set<String> orderedDishes = o.getOrderedDishes();
+        int totalPrice = 0;
+
+        for(String p:orderedDishes){
+            int qty = o.getDishOrderedAmount(p);
+            int price = productsMap.get(p).getPrice();
+            if(isDrink(p)){
+                totalPrice+=(price*qty*1.19);
+            }else{
+                totalPrice+=(price*qty*1.16);
+            }
+        }
+        return totalPrice;
+        
+
+    }
+
+    public boolean isDrink(String p){
+        return p == "COKE"; //For now because COKE is the only drink its in the statement.  
+
+    }
+
+    public float getProductTaxes(RestaurantProduct p){
+        float taxes = 0;
+        return taxes;
+    }
+
+
+
 
 }
